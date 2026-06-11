@@ -4,7 +4,7 @@
 """
 File: main.py (吾爱破解签到)
 Author: Mrzqd
-Date: 2024/8/22 18:30 (Original), 2025/06/25 (Refactor)
+Date: 2024/8/22 18:30 (Original), 2025/06/25 (Refactor), 2026/06/11 (update)
 cron: 30 7 * * *
 new Env('吾爱破解签到');
 """
@@ -47,22 +47,19 @@ URL_EXTERNAL_SIGN_API: str = "https://52pojie-sign-sever.zzboy.tk/api/52pojie"
 
 # 请求头
 COMMON_HEADERS: Dict[str, str] = {
-    "Connection": "keep-alive",
-    "Pragma": "no-cache",
-    "Cache-Control": "no-cache",
-    "Upgrade-Insecure-Requests": "1",
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36", # 更新UA
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-    "Sec-Fetch-Site": "same-origin",
-    "Sec-Fetch-Mode": "navigate",
-    "Sec-Fetch-User": "?1",
-    "Sec-Fetch-Dest": "document",
-    "sec-ch-ua": '"Chromium";v="110", "Not A(Brand";v="24", "Google Chrome";v="110"',
-    "sec-ch-ua-mobile": "?0",
-    "sec-ch-ua-platform": '"Windows"',
-    "Referer": URL_BASE,
-    "Accept-Encoding": "gzip, deflate, br",
-    "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
+  'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  'Accept': "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+  'cache-control': "no-cache",
+  'pragma': "no-cache",
+  'priority': "u=0, i",
+  'sec-ch-ua': "\"Chromium\";v=\"148\", \"Google Chrome\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+  'sec-ch-ua-mobile': "?0",
+  'sec-ch-ua-platform': "\"Windows\"",
+  'sec-fetch-dest': "document",
+  'sec-fetch-mode': "navigate",
+  'sec-fetch-site': "same-origin",
+  'sec-fetch-user': "?1",
+  'upgrade-insecure-requests': "1",
 }
 
 # 网络请求超时时间（秒）
@@ -78,11 +75,7 @@ def parse_cookie_str(cookie_str: str) -> Tuple[Optional[Dict[str, str]], str]:
     if not cookie_str:
         return None, "Cookie字符串为空"
 
-    try:
-        decoded_cookie = urllib.parse.unquote(cookie_str)
-    except Exception as e:
-        return None, f"Cookie解码失败: {e}"
-
+    decoded_cookie = cookie_str # 直接使用原始字符串，requests会自动处理编码
     cookies_for_requests = {}
     required_keys = {"htVC_2132_saltkey", "htVC_2132_auth"}
     found_keys = set()
